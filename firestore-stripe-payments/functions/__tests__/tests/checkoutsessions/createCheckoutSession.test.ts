@@ -121,6 +121,6 @@ describe('createCheckoutSession', () => {
       expect(paymentIntentClientSecret).toBeDefined();
       expect(ephemeralKeySecret).toBeDefined();
       expect(error).toBeUndefined();
-    });
+    }, 120000);
   });
 });

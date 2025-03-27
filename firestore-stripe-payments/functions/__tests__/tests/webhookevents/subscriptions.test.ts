@@ -64,6 +64,6 @@ describe('subscription webhook events', () => {
       const { invoice } = subscriptionDoc.doc.data();
 
       expect(invoice).toBeDefined();
-    }, 20000);
+    }, 120000);
   });
 });

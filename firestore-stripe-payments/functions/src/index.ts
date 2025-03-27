@@ -16,7 +16,7 @@
 
 import * as admin from 'firebase-admin';
 import { getEventarc } from 'firebase-admin/eventarc';
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v1';
 import Stripe from 'stripe';
 import {
   Product,
@@ -29,7 +29,7 @@ import * as logs from './logs';
 import config from './config';
 import { Timestamp } from 'firebase-admin/firestore';
 
-const apiVersion = '2022-11-15';
+const apiVersion = '2025-02-24.acacia';
 const stripe = new Stripe(config.stripeSecretKey, {
   apiVersion,
   // Register extension as a Stripe plugin
@@ -126,7 +126,7 @@ exports.createCheckoutSession = functions
       cancel_url,
       quantity = 1,
       payment_method_types,
-      shipping_rates = [],
+      shipping_options = [],
       metadata = {},
       automatic_payment_methods = { enabled: true },
       automatic_tax = false,
@@ -183,7 +183,7 @@ exports.createCheckoutSession = functions
         const sessionCreateParams: Stripe.Checkout.SessionCreateParams = {
           billing_address_collection,
           shipping_address_collection: { allowed_countries: shippingCountries },
-          shipping_rates,
+          shipping_options,
           customer,
           customer_update,
           line_items: line_items
@@ -730,7 +730,7 @@ const insertPaymentRecord = async (
 /**
  * A webhook handler function for the relevant Stripe events.
  */
-export const handleWebhookEvents = functions.handler.https.onRequest(
+export const handleWebhookEvents = functions.https.onRequest(
   async (req: functions.https.Request, resp) => {
     const relevantEvents = new Set([
       'product.created',

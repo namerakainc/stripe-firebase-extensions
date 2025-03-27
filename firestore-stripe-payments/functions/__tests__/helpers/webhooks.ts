@@ -1,5 +1,7 @@
-export const setupWebhooks = async (url) => {
-  const stripe = require('stripe')(process.env.STRIPE_API_KEY);
+import Stripe from 'stripe';
+
+export const setupWebhooks = async (url: string) => {
+  const stripe = new Stripe(process.env.STRIPE_API_KEY);
 
   const webhook = await stripe.webhookEndpoints.create({
     url,
